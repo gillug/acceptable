@@ -1,46 +1,46 @@
-<script type='text/javascript' src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-        
-    <script type='text/javascript'>
-        document.querySelectorAll('.link-list a').forEach(link => {
-            link.addEventListener('click', function(event) {
-                event.preventDefault();
+<script type='text/javascript'>
+            document.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
+                // Cookie consent banner
+                const cookieConsent = document.getElementById(&#39;cookie-consent&#39;);
+                const acceptCookies = document.getElementById(&#39;accept-cookies&#39;);
 
-                const platform = getPlatform();
-                const androidUrl = this.getAttribute('data-android-url');
-                const iosUrl = this.getAttribute('data-ios-url');
-                const webUrl = this.getAttribute('data-web-url');
-
-                let appUrl;
-                if (platform === 'android') {
-                    appUrl = androidUrl;
-                } else if (platform === 'ios') {
-                    appUrl = iosUrl;
-                } else {
-                    window.location = webUrl;
-                    return;
+                if (!localStorage.getItem(&#39;cookiesAccepted&#39;)) {
+                    cookieConsent.style.display = &#39;block&#39;;
                 }
 
-                // Try to open the app URL
-                window.location = appUrl;
+                acceptCookies.addEventListener(&#39;click&#39;, () =&gt; {
+                    localStorage.setItem(&#39;cookiesAccepted&#39;, &#39;true&#39;);
+                    cookieConsent.style.display = &#39;none&#39;;
+                });
 
-                // If the app is not opened within 1 second, redirect to the web URL
-                setTimeout(() => {
-                    window.location = webUrl;
-                }, 1000);
+                // Redirect consent popup
+                const socialLinks = document.querySelectorAll(&#39;.social-link&#39;);
+                const consentPopup = document.getElementById(&#39;consent-popup&#39;);
+                const consentPlatform = document.getElementById(&#39;consent-platform&#39;);
+                const consentYes = document.getElementById(&#39;consent-yes&#39;);
+                const consentNo = document.getElementById(&#39;consent-no&#39;);
+                let targetHref, targetDeeplink;
+
+                socialLinks.forEach(link =&gt; {
+                    link.addEventListener(&#39;click&#39;, event =&gt; {
+                        event.preventDefault();
+                        targetHref = link.href;
+                        targetDeeplink = link.getAttribute(&#39;data-deeplink&#39;);
+                        consentPlatform.textContent = link.dataset.platform;
+                        consentPopup.style.display = &#39;flex&#39;;
+                    });
+                });
+
+                consentYes.addEventListener(&#39;click&#39;, () =&gt; {
+                    consentPopup.style.display = &#39;none&#39;;
+                    window.location.href = targetDeeplink;
+                    setTimeout(() =&gt; {
+                        window.location.href = targetHref;
+                    }, 1000);
+                });
+
+                consentNo.addEventListener(&#39;click&#39;, () =&gt; {
+                    consentPopup.style.display = &#39;none&#39;;
+                });
             });
-        });
-
-        function getPlatform() {
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-            if (/android/i.test(userAgent)) {
-                return 'android';
-            }
-
-            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                return 'ios';
-            }
-
-            return 'web';
-        }
-    </script>
+        </script>
