@@ -1,4 +1,3 @@
-<script type='text/javascript'>
             document.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
                 // Cookie consent banner
                 const cookieConsent = document.getElementById(&#39;cookie-consent&#39;);
@@ -43,4 +42,3 @@
                     consentPopup.style.display = &#39;none&#39;;
                 });
             });
-        </script>
