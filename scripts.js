@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     handleCookieConsent();
     handleSocialLinksConsent();
-    handleDeepLinks();
 });
 
 function handleCookieConsent() {
@@ -24,77 +23,51 @@ function handleSocialLinksConsent() {
     const consentPlatform = document.getElementById('consent-platform');
     const consentYes = document.getElementById('consent-yes');
     const consentNo = document.getElementById('consent-no');
-    let targetHref, targetDeeplink;
 
     socialLinks.forEach(link => {
         link.addEventListener('click', event => {
-            event.preventDefault();
-            targetHref = link.href;
-            targetDeeplink = link.getAttribute('data-deeplink');
-            consentPlatform.textContent = link.dataset.platform;
+            event.preventDefault(); // Prevent default action
+            const targetHref = link.href;
+            const targetDeeplink = link.getAttribute('data-deeplink');
+            const platform = link.dataset.platform;
+            consentPlatform.textContent = platform;
             consentPopup.style.display = 'flex';
-        });
-    });
 
-    consentYes.addEventListener('click', () => {
-        consentPopup.style.display = 'none';
-        redirectTo(targetDeeplink, targetHref);
-    });
+            consentYes.addEventListener('click', () => {
+                consentPopup.style.display = 'none';
+                deepLink(link);
+            }, { once: true }); // Ensure the event listener is called only once
 
-    consentNo.addEventListener('click', () => {
-        consentPopup.style.display = 'none';
-    });
-}
-
-function handleDeepLinks() {
-    document.querySelectorAll('.social-link').forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-
-            const platform = getPlatform();
-            const androidUrl = this.getAttribute('data-android-url');
-            const iosUrl = this.getAttribute('data-ios-url');
-            const webUrl = this.getAttribute('data-web-url');
-
-            let appUrl;
-            if (platform === 'android') {
-                appUrl = androidUrl;
-            } else if (platform === 'ios') {
-                appUrl = iosUrl;
-            } else {
-                window.location = webUrl;
-                return;
-            }
-
-            // Try to open the app URL
-            window.location = appUrl;
-
-            // If the app is not opened within 1 second, redirect to the web URL
-            setTimeout(() => {
-                window.location = webUrl;
-            }, 1000);
+            consentNo.addEventListener('click', () => {
+                consentPopup.style.display = 'none';
+            }, { once: true }); // Ensure the event listener is called only once
         });
     });
 }
 
-function redirectTo(deeplink, webLink) {
-    if (deeplink) {
-        window.location.href = deeplink;
-    }
-    window.addEventListener('pagehide', () => {
-        if (webLink) {
-            window.location.href = webLink;
-        }
-    });
-}
-
-function getPlatform() {
+function deepLink(element) {
+    const deeplink = element.getAttribute('data-deeplink');
+    const androidUrl = element.getAttribute('data-android-url');
+    const iosUrl = element.getAttribute('data-ios-url');
+    const webUrl = element.getAttribute('data-web-url');
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    let url;
     if (/android/i.test(userAgent)) {
-        return 'android';
+        url = androidUrl;
+    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        url = iosUrl;
+    } else {
+        url = webUrl;
     }
-    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return 'ios';
-    }
-    return 'web';
+
+    // Attempt to open the deep link URL
+    window.location.href = deeplink || url;
+
+    // If the app is not opened within 1 second, redirect to the web URL
+    setTimeout(() => {
+        if (deeplink && !document.hasFocus()) {
+            window.location.href = webUrl;
+        }
+    }, 1000);
 }
