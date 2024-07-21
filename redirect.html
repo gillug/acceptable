@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
-    <script>
-        function redirect() {
-            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            var urlParams = new URLSearchParams(window.location.search);
-            var androidUrl = urlParams.get('android');
-            var iosUrl = urlParams.get('ios');
-            var webUrl = urlParams.get('web');
-
-            if (/android/i.test(userAgent)) {
-                window.location = androidUrl;
-            } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                window.location = iosUrl;
-            } else {
-                window.location = webUrl;
-            }
-        }
-    </script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>My Social Links</title>
+	<link rel="stylesheet" href="styles.css">
+	<script src="scripts.js" defer></script>
 </head>
-<body onload="redirect()">
-    <p>Redirecting...</p>
+<body>
+	<div class="social-links">
+		<a class="social-link" href="#" data-deeplink="instagram://user?username=suman_rathore_shekhawat" data-android-url="instagram://user?username=suman_rathore_shekhawat" data-ios-url="https://www.instagram.com/suman_rathore_shekhawat" data-web-url="https://www.instagram.com/suman_rathore_shekhawat" data-platform="Instagram">
+			<span>Instagram</span>
+		</a>
+		<a class="social-link" href="#" data-deeplink="fb://profile/Sumankanwarpage" data-android-url="fb://profile/Sumankanwarpage" data-ios-url="https://www.facebook.com/Sumankanwarpage" data-web-url="https://www.facebook.com/Sumankanwarpage" data-platform="Facebook">
+			<span>Facebook</span>
+		</a>
+		<a class="social-link" href="#" data-deeplink="whatsapp://whatsapp.com/channel/0029Vafo66oIXnlsJsLI712o" data-android-url="whatsapp://whatsapp.com/channel/0029Vafo66oIXnlsJsLI712o" data-ios-url="https://whatsapp.com/channel/0029Vafo66oIXnlsJsLI712o" data-web-url="https://whatsapp.com/channel/0029Vafo66oIXnlsJsLI712o" data-platform="WhatsApp">
+			<span>WhatsApp</span>
+		</a>
+		<a class="social-link" href="#" data-deeplink="twitter://user?screen_name=sumankanwar" data-android-url="twitter://user?screen_name=sumankanwar" data-ios-url="https://twitter.com/sumankanwar" data-web-url="https://twitter.com/sumankanwar" data-platform="Twitter">
+			<span>Twitter</span>
+		</a>
+		<a class="social-link" href="#" data-deeplink="intent://youtube.com/@sumankanwar3928?sub_confirmation=1#Intent;scheme=https;package=com.google.android.youtube;end" data-android-url="intent://youtube.com/@sumankanwar3928?sub_confirmation=1#Intent;scheme=https;package=com.google.android.youtube;end" data-ios-url="youtube://youtube.com/@sumankanwar3928?sub_confirmation=1" data-web-url="https://www.youtube.com/@sumankanwar3928?sub_confirmation=1" data-platform="YouTube">
+			<span>YouTube</span>
+		</a>
+	</div>
+	<div class="consent-popup" id="consent-popup">
+		<div class="consent-popup-content">
+			<p id="consent-message">You are about to leave this page <br/> and go to <span id="consent-platform"></span>.<br/> Do you want to continue?</p>
+			<button id="consent-no">No</button>
+			<button id="consent-yes">Yes</button>
+		</div>
+	</div>
+	<div class="cookie-consent" id="cookie-consent">
+		<p>This website uses cookies to enhance the user experience. By using our website, you agree to our <a href="/privacy-policy">Privacy Policy</a>.</p>
+		<button id="accept-cookies">Accept</button>
+	</div>
 </body>
 </html>
