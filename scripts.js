@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const socialLinks = document.querySelectorAll('.social-link');
     const consentPopup = document.getElementById('consent-popup');
     const consentPlatform = document.getElementById('consent-platform');
-    const consentYes = document.getElementById('consent-yes');
     const consentNo = document.getElementById('consent-no');
+    const consentYes = document.getElementById('consent-yes');
     let targetHref, targetDeeplink;
 
     socialLinks.forEach(link => {
@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     consentYes.addEventListener('click', () => {
         consentPopup.style.display = 'none';
         window.location.href = targetDeeplink;
-        setTimeout(() => {
+        window.addEventListener('pagehide', () => {
             window.location.href = targetHref;
-        }, 1000);
+        });
     });
 
     consentNo.addEventListener('click', () => {
