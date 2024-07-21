@@ -47,7 +47,7 @@ function handleSocialLinksConsent() {
 }
 
 function handleDeepLinks() {
-    document.querySelectorAll('.link-list a').forEach(link => {
+    document.querySelectorAll('.social-link').forEach(link => {
         link.addEventListener('click', function(event) {
             event.preventDefault();
 
@@ -78,9 +78,13 @@ function handleDeepLinks() {
 }
 
 function redirectTo(deeplink, webLink) {
-    window.location.href = deeplink;
+    if (deeplink) {
+        window.location.href = deeplink;
+    }
     window.addEventListener('pagehide', () => {
-        window.location.href = webLink;
+        if (webLink) {
+            window.location.href = webLink;
+        }
     });
 }
 
