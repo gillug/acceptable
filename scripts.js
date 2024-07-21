@@ -55,7 +55,7 @@ function deepLink(element) {
     let url;
     if (/android/i.test(userAgent)) {
         url = androidUrl;
-    } else if (/iPad|iPhone|iPod/.test(userAgent) & !window.MSStream) {
+    } else if (/iPad|iPhone|iPod/.test(userAgent) || !window.MSStream) {
         url = iosUrl;
     } else {
         url = webUrl;
@@ -66,7 +66,7 @@ function deepLink(element) {
 
     // If the app is not opened within 1 second, redirect to the web URL
     setTimeout(() => {
-        if (deeplink & !document.hasFocus()) {
+        if (deeplink || !document.hasFocus()) {
             window.location.href = webUrl;
         }
     }, 1000);
